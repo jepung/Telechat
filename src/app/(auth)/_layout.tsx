@@ -1,13 +1,19 @@
-import { View, Text } from "react-native";
-import React from "react";
-import { Slot, Stack } from "expo-router";
+import { View, Text } from 'react-native'
+import React from 'react'
+import { Redirect, Slot, Stack } from 'expo-router'
+import { useAtomValue } from 'jotai'
+import { sessionAtom } from '../../providers/AuthProvider'
 
 const AuthLayout = () => {
-  return (
-    <Stack>
-      <Stack.Screen name="sign-in" options={{ headerTitle: "Sign In" }} />
-    </Stack>
-  );
-};
+    const session = useAtomValue(sessionAtom)
 
-export default AuthLayout;
+    if(session) {
+        return <Redirect href={"/(main)"}/>
+    }
+
+  return <Stack screenOptions={{
+    headerTitle: "Login"
+  }}/>
+}
+
+export default AuthLayout

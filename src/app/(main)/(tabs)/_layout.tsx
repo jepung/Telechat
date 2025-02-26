@@ -3,6 +3,7 @@ import { Tabs } from "expo-router";
 import { AntDesign, FontAwesome } from "@expo/vector-icons";
 
 const TabsLayout = () => {
+
   return (
     <Tabs
       screenOptions={{
@@ -27,6 +28,16 @@ const TabsLayout = () => {
           tabBarLabel: "Chats",
           tabBarIcon: ({ size, color }) => (
             <FontAwesome name="commenting" size={size} color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="profile"
+        options={{
+          headerTitle: "Profile",
+          tabBarLabel: "Profile",
+          tabBarIcon: ({ size, color }) => (
+            <FontAwesome name="user" size={size} color={color} />
           ),
         }}
       />

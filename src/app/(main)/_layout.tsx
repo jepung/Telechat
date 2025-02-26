@@ -1,58 +1,32 @@
-import React, { useEffect } from "react";
-import { Redirect, Slot, Stack, useLocalSearchParams } from "expo-router";
-import { StreamChat } from "stream-chat";
-import { Chat, OverlayProvider } from "stream-chat-expo";
+import { Redirect, Stack } from "expo-router";
 import { useAtomValue } from "jotai";
 import { channelAtom } from "../../store";
+import ChatProvider from "../../providers/ChatProvider";
+import { sessionAtom } from "../../providers/AuthProvider";
 
-export const client = StreamChat.getInstance("se66mbct33w5");
 
 const MainLayout = () => {
-  let isAuth = true;
   const channel = useAtomValue(channelAtom);
+  const session = useAtomValue(sessionAtom)
 
-  if (!isAuth) {
-    return <Redirect href={"/sign-in"} />;
+  if(!session) {
+    return <Redirect href={"/login"}/>
   }
 
-  useEffect(() => {
-    const connect = async () => {
-      await client.connectUser(
-        {
-          id: "jlahey",
-          name: "Jim Lahey",
-          image: "https://i.imgur.com/fR9Jz14.png",
-        },
-        client.devToken("jlahey")
-      );
 
-      //   const channel = client.channel("messaging", "the_park", {
-      //     name: "the_park",
-      //   });
-
-      //   await channel.watch();
-    };
-
-    connect();
-  }, []);
-
-  return (
-    <OverlayProvider>
-      <Chat client={client}>
-        <Stack screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="(tabs)" />
-          <Stack.Screen
-            name="channel/[cid]"
-            options={{
-              headerShown: true,
-              headerTitle: channel?.data?.name,
-              headerBackButtonDisplayMode: "minimal",
-            }}
-          />
-        </Stack>
-      </Chat>
-    </OverlayProvider>
-  );
+  return <ChatProvider>
+  <Stack screenOptions={{ headerShown: false }}>
+    <Stack.Screen name="(tabs)" />
+    <Stack.Screen
+      name="channel"
+      options={{
+        headerShown: true,
+        headerTitle: channel?.data?.name,
+        headerBackButtonDisplayMode: "minimal",
+      }}
+    />
+  </Stack>
+</ChatProvider>
 };
 
 export default MainLayout;
